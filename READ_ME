@@ -1,0 +1,56 @@
+Preprocessing clustering :
+
+%  This suite of routines is done to facilitate the visualisation and the analysis of data sets with extensive cells
+%  generated using 2P microscopy. The strategy we employ is to first cluster the data 
+%  12/2018 Jacques Bourg, UNIC CNRS, Bathellier team 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% If you need to use it for a different stim, just change the one line in the function Run cluster : 
+                  for u       = 1:  length(Liste)
+                  folder_name =  Liste{1,u};  
+                  Responses   =   Data2Stim(folder_name,folder_name,1,1);% change this into  Data2Stim(folder_name,folder_name,1)  
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+  
+
+Transform_file_format: 
+   - This script will look for the .mat file to transform (when it comes from a .npy for example.), and will save it into a structure "Responses" with two fields : 
+                        Responses.TracesDg  of dimensions [N_clusters, N time frames, Nsounds] and Responses.dt 
+
+   - This script is not necessary when we have the output files from the tomato program ( .mesc-signals.mat, .mesc-regions.mat, ExperimentInfo.mat), because the routine "Data2Stim" in the programme Main_clustering will go over each file, and it it has not been formatted and saved previously, it will do it and will save it in each data folder (ex  Path ../Colliculus_repository/170822_col22/ ) in a file called Data.mat. In Data.mat, the signals will have the right variable names and will be formatted appropriately. In this way it will be much faster for the program to access it in subsequent utilisations.               
+
+
+
+MAIN_stims_displays: 
+
+   -this file will allow you to parametrize how you want to visualize the stimulus, building as many windows as you want (one for each family of stimulus that you define), and defining also the details of the visualization like the relative positions of the plots, how many plots you want to put in a window, their repective colors... The output of this routine will be a .mat file wich will contain the visualisation parameters and wich will be readable by the  routine "Main_Visu_cells_and_clusters"
+
+
+
+MAIN_clustering :
+   
+   - Load first all the files you want to cluster either manually or automatically ( asking him to take all the files in a folder)
+   - You can add additional information about the depth of each experiment and the mouse number (to check for the redundancy of the experiments). When in an experiment the depth is unknown, leave 
+ depth = 0 and validate.  This depth will be exploited to do spatial analysis in a future version of this suite. 
+   - Run clustering: runs hierarchical clustering using the option pdist('corr') = 1 -correlation (a quantity comprised between 0 and 2).
+   - When the cluster is finished you can verify that you did a good clustering by trying a threshold d (beween 0 and 2) and observing if the clusters are homogeneous. The option subsampling allows to see a different subset of plotted cells (5).     
+   - When you are happy with the threshold, save it in a given folder as Data.mat
+ 
+Both MAIN_stims_displays and MAIN_clustering can be run in any order.  
+
+
+Main Visu cells and clusters: 
+
+- Charge first both the visualisation parameters and the data (the Data.mat output of MAIN_clustering) 
+- Tick the little checkbox if you want to see the plots in a version adapted for papers/ posters ( in which all the plots will be exactly equal).
+- Plot the data in the different figures. 
+- Print: save all the plots at once in the format you decide (.eps or .png)
+- ->    or  <- iterate over the clusters
+- zoom +-   ,after the zoom, refresh the cluster, going back and forth with the arrows
+- Annotate : in order to annotate, select a category and subcategory ( if it is inexistant, you can create it). Click on the lists and then click on add to list before vaidate. Once you are back to 
+             the main display, you can pursue the visualisation/annotation of the clusters, but then think about saving the annotations using "Save annotations & lists"
+- Create list
+- Save annotations & lists: using matlab language, create a list that will . For instance "and( Pure tones, Chirps)" will select all the clusters that have both Pure tones and chirps.
+  Once you created the list you can navigate though the list by selecting it by clicking on a list on the popup menu, which is marked default, and advance using the arrows  <- and ->.
+- Remember to save the lists
+- close (closes the plots).
